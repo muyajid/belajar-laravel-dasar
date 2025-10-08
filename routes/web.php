@@ -8,6 +8,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\GuardiansController;
 use App\Http\Controllers\GetData;
 use App\Http\Controllers\ClassRoomController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -28,3 +30,5 @@ Route::get('/', [HomeController::class, 'home']);
 Route::get('/datasiswa', [StudentController::class, 'index']);
 Route::get('/guardians', [GuardiansController::class, 'index']);
 Route::get('/classroom', [ClassRoomController::class, 'index']);
+Route::get('/subject', [SubjectController::class, 'index']);
+Route::get('/teacher', [TeacherController::class, 'index']);
