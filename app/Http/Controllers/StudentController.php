@@ -47,7 +47,7 @@ class StudentController extends Controller
         //     ]
         //     ];
 
-        $students = Student::all();
+        $students = Student::with('classroom')->get();
 
         return \view('datasiswa', [
             'title' => "Data Siswa",

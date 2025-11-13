@@ -12,7 +12,7 @@ class SubjectController extends Controller
         $data = Subject::all();
 
         return \view('subject', [
-            'title' => "Ini Halaman Kelas",
+            'title' => "Ini Halaman Subject",
             'data' => $data,
         ]);
     }

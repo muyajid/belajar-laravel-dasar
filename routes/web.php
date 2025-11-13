@@ -10,18 +10,11 @@ use App\Http\Controllers\GetData;
 use App\Http\Controllers\ClassRoomController;
 use App\Http\Controllers\SubjectController;
 use App\Http\Controllers\TeacherController;
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-// Route::get('/', function () {
-//     return "<h1>Hello from laravel</h1>";
-// });
-// Route::get('/profile', function () {
-//     return view('profile');
-// });
-// Route::get('/profile2', [ProfilController::class, 'index']);
+use App\Http\Controllers\Admin\AdminStudent;
+use App\Http\Controllers\Admin\AdminClassroom;
+use App\Http\Controllers\Admin\Dashboard;
+use App\Http\Controllers\Admin\AdminSubject;
+use App\Http\Controllers\Admin\AdminTeacher;
 
 Route::get('/profile', [ProfilController::class, 'profile']);
 
@@ -32,3 +25,17 @@ Route::get('/guardians', [GuardiansController::class, 'index']);
 Route::get('/classroom', [ClassRoomController::class, 'index']);
 Route::get('/subject', [SubjectController::class, 'index']);
 Route::get('/teacher', [TeacherController::class, 'index']);
+
+// Admin route
+Route::get('/admin', [Dashboard::class, 'index']);
+// Hierarki endpoint admin
+Route::prefix('admin')->group(function () {
+    Route::get('/student', [AdminStudent::class, 'index'])->name('admin.student.index');
+    Route::post('/student', [AdminStudent::class, 'store'])->name('admin.student.store');
+    Route::get('/classroom', [AdminClassroom::class, 'index'])->name('admin.classroom.index');
+    Route::post('/classroom', [AdminClassroom::class, 'store'])->name('admin.classroom.store');
+    Route::get('/subject', [AdminSubject::class, 'index'])->name('admin.subject.index');
+    Route::post('/subject', [AdminSubject::class, 'store'])->name('admin.subject.store');
+    Route::get('/teacher', [AdminTeacher::class, 'index'])->name('admin.teacher.index');
+    Route::post('/teacher', [AdminTeacher::class, 'store'])->name('admin.teacher.store');
+});

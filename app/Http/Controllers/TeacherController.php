@@ -12,7 +12,7 @@ class TeacherController extends Controller
         $data = Teacher::all();
 
         return \view('teacher', [
-            'title' => 'Ini Halaman Wali Kelas',
+            'title' => 'Ini Halaman Kelas',
             'data' => $data,
         ]);
     }

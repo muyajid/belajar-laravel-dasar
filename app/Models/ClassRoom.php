@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class ClassRoom extends Model
 {
     use HasFactory;
-
+    
     protected $table = 'class_rooms';
-    protected $fillabel = ['name'];
+    protected $fillable = ['name'];
 
     public function students()
     {
