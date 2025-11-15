@@ -23,6 +23,7 @@
                     <th scope="col" class="px-6 py-3">Phone</th>
                     <th scope="col" class="px-6 py-3">Email</th>
                     <th scope="col" class="px-6 py-3">Addres</th>
+                    <th scope="col" class="px-6 py-3">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,6 +36,45 @@
                         <td class="px-6 py-4">{{ $teach->phone }}</td>
                         <td class="px-6 py-4">{{ $teach->email }}</td>
                         <td class="px-6 py-4">{{ $teach->address }}</td>
+                        <td class="px-6 py-4">
+                            @php
+                                $dropdownId = 'teacher-dropdown-' . $teach->id;
+                                $buttonId = $dropdownId . '-button';
+                            @endphp
+
+                            <button 
+                                id="{{ $buttonId }}" 
+                                data-dropdown-toggle="{{ $dropdownId }}" 
+                                class="inline-flex items-center p-0.5 text-sm text-gray-500 hover:text-gray-800 rounded-lg">
+                                <svg class="w-5 h-5" fill="currentColor">
+                                    <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                </svg>
+                            </button>
+
+                            <div id="{{ $dropdownId }}" 
+                                class="hidden z-10 w-44 bg-white rounded divide-y shadow dark:bg-gray-700">
+
+                                <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
+                                    <li>
+                                        <a href="#" 
+                                            data-modal-target="updateTeachModal-{{ $teach->id }}" 
+                                            data-modal-toggle="updateTeachModal-{{ $teach->id }}"
+                                            class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                            Edit
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <div class="py-1">
+                                    <a href="#" 
+                                        data-modal-target="deleteTeachModal-{{ $teach->id }}" 
+                                        data-modal-toggle="deleteTeachModal-{{ $teach->id }}"
+                                        class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200">
+                                        Delete
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 @empty
                     <tr>
@@ -112,4 +152,86 @@
             </div>
         </div>
     </div>
+
+     @foreach ($teacher as $teach)
+        <div id="updateTeachModal-{{ $teach->id }}" tabindex="-1" aria-hidden="true"
+            class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
+
+            <div class="relative p-4 w-full max-w-md">
+                <div class="bg-white rounded-lg shadow dark:bg-gray-700">
+
+                    <div class="flex justify-between p-4 border-b dark:border-gray-600">
+                        <h3 class="text-lg font-semibold text-white">Update Student</h3>
+                        <button data-modal-hide="updateTeachModal-{{ $teach->id }}" class="text-gray-400 w-8 h-8">✕</button>
+                    </div>
+
+                    <form action="{{ route('admin.teacher.update', $teach->id) }}" method="POST" class="p-6 space-y-4">
+                        @csrf
+                        @method('PUT')
+
+                        <input type="text" name="name" value="{{ $teach->name }}" required
+                            class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                        <input type="text" name="subject_name" value="{{ $teach->subject->name }}" required
+                            class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                        <input type="text" name="subject_description" value="{{ $teach->subject->description }}" required
+                            class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                        <input type="text" name="phone" value="{{ $teach->phone }}" required
+                            class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                        <input type="email" name="email" value="{{ $teach->email }}" required
+                            class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                        <input type="text" name="address" value="{{ $teach->address }}" required
+                            class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                        <div class="flex justify-end gap-2">
+                            <button type="button" data-modal-hide="updateStudentModal-{{ $teach->id }}"
+                                class="px-4 py-2 bg-gray-200 rounded-lg">Batal</button>
+
+                            <button type="submit" class="px-4 py-2 bg-blue-700 text-white rounded-lg">Update</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+    {{-- MODAL DELETE PER-STUDENT --}}
+    @foreach ($teacher as $teach)
+        <div id="deleteTeachModal-{{ $teach->id }}" tabindex="-1" aria-hidden="true"
+            class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
+
+            <div class="relative p-4 w-full max-w-md">
+                <div class="bg-white rounded-lg shadow dark:bg-gray-700">
+
+                    <div class="p-4 border-b">
+                        <h3 class="text-lg font-semibold text-white">Hapus Teacher Dan Subject?</h3>
+                    </div>
+
+                    <form action="{{ route('admin.teacher.destroy', $teach->id) }}" method="POST" class="p-6">
+                        @csrf
+                        @method('DELETE')
+
+                        <p class="mb-4 text-gray-700">
+                            Yakin ingin menghapus Teacher :  <b>{{ $teach->name }}</b>? dan Subject :  <b>{{ $teach->subject->name }}</b>
+                        </p>
+
+                        <div class="flex justify-end gap-2">
+                            <button type="button" data-modal-hide="deleteTeachModal-{{ $teach->id }}"
+                                class="px-4 py-2 bg-gray-200 rounded-lg">Batal</button>
+
+                            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg">Hapus</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    @endforeach
 </x-admin.dash-layout>

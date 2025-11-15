@@ -1,46 +1,39 @@
 <x-admin.dash-layout :title="$title">
-
-    {{-- Header --}}
+    {{-- Header dan Tombol Tambah --}}
     <div class="flex justify-between items-center mt-10 mb-6">
-        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Student List</h1>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Guardians List</h1>
 
         <button 
-            data-modal-target="addStudentModal" 
-            data-modal-toggle="addStudentModal"
-            class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5">
-            + Tambah Student
+            data-modal-target="addGuardiansModal" 
+            data-modal-toggle="addGuardiansModal"
+            class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+            + Add Guardians
         </button>
     </div>
 
-    {{-- Table --}}
+    {{-- Tabel Data --}}
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                    <th class="px-6 py-3">No</th>
-                    <th class="px-6 py-3">Nama</th>
-                    <th class="px-6 py-3">Email</th>
-                    <th class="px-6 py-3">Alamat</th>
-                    <th class="px-6 py-3">Kelas</th>
-                    <th class="px-6 py-3">Tanggal Lahir</th>
-                    <th class="px-6 py-3">Action</th>
-                </tr>
+                    <th scope="col" class="px-6 py-3">No</th>
+                    <th scope="col" class="px-6 py-3">Name</th>
+                    <th scope="col" class="px-6 py-3">Job</th>
+                    <th scope="col" class="px-6 py-3">Phone</th>
+                    <th scope="col" class="px-6 py-3">Email</th>
+                    <th scope="col" class="px-6 py-3">Action</th>
             </thead>
-
             <tbody>
-                @forelse ($students as $i => $student)
-                    <tr class="bg-white border-b hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
-
+                @forelse ($guardians as $i => $guard)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-6 py-4">{{ $i + 1 }}</td>
-                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $student->nama }}</td>
-                        <td class="px-6 py-4">{{ $student->email }}</td>
-                        <td class="px-6 py-4">{{ $student->alamat }}</td>
-                        <td class="px-6 py-4">{{ $student->classroom->name ?? '-' }}</td>
-                        <td class="px-6 py-4">{{ $student->tanggal_lahir }}</td>
-
-                        <td class="px-6 py-4">
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $guard->name }}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $guard->job }}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $guard->phone }}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $guard->email }}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
                             @php
-                                $dropdownId = 'student-dropdown-' . $student->id;
+                                $dropdownId = 'guardians-dropdown-' . $guard->id;
                                 $buttonId = $dropdownId . '-button';
                             @endphp
 
@@ -59,8 +52,8 @@
                                 <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
                                     <li>
                                         <a href="#" 
-                                            data-modal-target="updateStudentModal-{{ $student->id }}" 
-                                            data-modal-toggle="updateStudentModal-{{ $student->id }}"
+                                            data-modal-target="updateGuardiansModal-{{ $guard->id }}" 
+                                            data-modal-toggle="updateGuardiansModal-{{ $guard->id }}"
                                             class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                             Edit
                                         </a>
@@ -69,8 +62,8 @@
 
                                 <div class="py-1">
                                     <a href="#" 
-                                        data-modal-target="deleteStudentModal-{{ $student->id }}" 
-                                        data-modal-toggle="deleteStudentModal-{{ $student->id }}"
+                                        data-modal-target="deleteGuardiansModal-{{ $guard->id }}" 
+                                        data-modal-toggle="deleteGuardiansModal-{{ $guard->id }}"
                                         class="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200">
                                         Delete
                                     </a>
@@ -78,12 +71,11 @@
 
                             </div>
                         </td>
-
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="text-center py-4 text-gray-500 dark:text-gray-400">
-                            Belum ada data siswa.
+                        <td colspan="5" class="text-center py-4 text-gray-500 dark:text-gray-400">
+                            Belum ada data guardians.
                         </td>
                     </tr>
                 @endforelse
@@ -92,41 +84,34 @@
     </div>
 
     {{-- MODAL TAMBAH --}}
-    <div id="addStudentModal" tabindex="-1" aria-hidden="true"
+    <div id="addGuardiansModal" tabindex="-1" aria-hidden="true"
         class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
 
         <div class="relative p-4 w-full max-w-md">
             <div class="bg-white rounded-lg shadow dark:bg-gray-700">
 
                 <div class="flex justify-between p-4 border-b dark:border-gray-600">
-                    <h3 class="text-lg font-semibold text-white">Tambah Student</h3>
-                    <button data-modal-hide="addStudentModal" class="text-gray-400 w-8 h-8">✕</button>
+                    <h3 class="text-lg font-semibold text-white">Tambah Guardians</h3>
+                    <button data-modal-hide="addGuardiansModal" class="text-gray-400 w-8 h-8">✕</button>
                 </div>
 
-                <form action="{{ route('admin.student.store') }}" method="POST" class="p-6 space-y-4">
+                <form action="{{ route('admin.guardians.store') }}" method="POST" class="p-6 space-y-4">
                     @csrf
 
-                    <input type="text" name="nama" placeholder="Nama" required
+                    <input type="text" name="name" placeholder="Nama" required
+                        class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                    <input type="text" name="job" placeholder="Job" required
+                        class="bg-gray-50 border rounded-lg w-full p-2.5">
+
+                    <input type="text" name="phone" placeholder="Phone" required
                         class="bg-gray-50 border rounded-lg w-full p-2.5">
 
                     <input type="email" name="email" placeholder="Email" required
                         class="bg-gray-50 border rounded-lg w-full p-2.5">
 
-                    <input type="text" name="alamat" placeholder="Alamat" required
-                        class="bg-gray-50 border rounded-lg w-full p-2.5">
-
-                    <input type="date" name="tanggal_lahir" required
-                        class="bg-gray-50 border rounded-lg w-full p-2.5">
-
-                    <select name="class_rooms_id" required class="bg-gray-50 border rounded-lg w-full p-2.5">
-                        <option value="">-- Pilih Kelas --</option>
-                        @foreach ($classrooms as $classroom)
-                            <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
-                        @endforeach
-                    </select>
-
                     <div class="flex justify-end gap-2">
-                        <button type="button" data-modal-hide="addStudentModal"
+                        <button type="button" data-modal-hide="addGuardiansModal"
                             class="px-4 py-2 bg-gray-200 rounded-lg">Batal</button>
 
                         <button type="submit" class="px-4 py-2 bg-blue-700 text-white rounded-lg">Simpan</button>
@@ -138,47 +123,37 @@
         </div>
     </div>
 
-
-    {{-- MODAL UPDATE PER-STUDENT --}}
-    @foreach ($students as $student)
-        <div id="updateStudentModal-{{ $student->id }}" tabindex="-1" aria-hidden="true"
+    {{-- MODAL UPDATE PER-GUARDIANS --}}
+    @foreach ($guardians as $guard)
+        <div id="updateGuardiansModal-{{ $guard->id }}" tabindex="-1" aria-hidden="true"
             class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
 
             <div class="relative p-4 w-full max-w-md">
                 <div class="bg-white rounded-lg shadow dark:bg-gray-700">
 
                     <div class="flex justify-between p-4 border-b dark:border-gray-600">
-                        <h3 class="text-lg font-semibold text-white">Update Student</h3>
-                        <button data-modal-hide="updateStudentModal-{{ $student->id }}" class="text-gray-400 w-8 h-8">✕</button>
+                        <h3 class="text-lg font-semibold text-white">Update Guardians</h3>
+                        <button data-modal-hide="updateGuardiansModal-{{ $guard->id }}" class="text-gray-400 w-8 h-8">✕</button>
                     </div>
 
-                    <form action="{{ route('admin.student.update', $student->id) }}" method="POST" class="p-6 space-y-4">
+                    <form action="{{ route('admin.guardians.update', $guard->id) }}" method="POST" class="p-6 space-y-4">
                         @csrf
                         @method('PUT')
 
-                        <input type="text" name="nama" value="{{ $student->nama }}" required
+                        <input type="text" name="name" value="{{ $guard->name }}" required
                             class="bg-gray-50 border rounded-lg w-full p-2.5">
 
-                        <input type="email" name="email" value="{{ $student->email }}" required
+                        <input type="text" name="job" value="{{ $guard->job }}" required
                             class="bg-gray-50 border rounded-lg w-full p-2.5">
 
-                        <input type="text" name="alamat" value="{{ $student->alamat }}" required
+                        <input type="text" name="phone" value="{{ $guard->phone }}" required
                             class="bg-gray-50 border rounded-lg w-full p-2.5">
 
-                        <input type="date" name="tanggal_lahir" value="{{ $student->tanggal_lahir }}" required
+                        <input type="text" name="email" value="{{ $guard->email }}" required
                             class="bg-gray-50 border rounded-lg w-full p-2.5">
-
-                        <select name="class_rooms_id" required class="bg-gray-50 border rounded-lg w-full p-2.5">
-                            @foreach ($classrooms as $classroom)
-                                <option value="{{ $classroom->id }}"
-                                    {{ $student->class_rooms_id == $classroom->id ? 'selected' : '' }}>
-                                    {{ $classroom->name }}
-                                </option>
-                            @endforeach
-                        </select>
 
                         <div class="flex justify-end gap-2">
-                            <button type="button" data-modal-hide="updateStudentModal-{{ $student->id }}"
+                            <button type="button" data-modal-hide="updateGuardiansModal-{{ $guard->id }}"
                                 class="px-4 py-2 bg-gray-200 rounded-lg">Batal</button>
 
                             <button type="submit" class="px-4 py-2 bg-blue-700 text-white rounded-lg">Update</button>
@@ -191,29 +166,28 @@
         </div>
     @endforeach
 
-
     {{-- MODAL DELETE PER-STUDENT --}}
-    @foreach ($students as $student)
-        <div id="deleteStudentModal-{{ $student->id }}" tabindex="-1" aria-hidden="true"
+    @foreach ($guardians as $guard)
+        <div id="deleteGuardiansModal-{{ $guard->id }}" tabindex="-1" aria-hidden="true"
             class="hidden fixed inset-0 z-50 flex justify-center items-center bg-black/50">
 
             <div class="relative p-4 w-full max-w-md">
                 <div class="bg-white rounded-lg shadow dark:bg-gray-700">
 
                     <div class="p-4 border-b">
-                        <h3 class="text-lg font-semibold text-white">Hapus Student?</h3>
+                        <h3 class="text-lg font-semibold text-white">Hapus Guardians?</h3>
                     </div>
 
-                    <form action="{{ route('admin.student.destroy', $student->id) }}" method="POST" class="p-6">
+                    <form action="{{ route('admin.guardians.destroy', $guard->id) }}" method="POST" class="p-6">
                         @csrf
                         @method('DELETE')
 
                         <p class="mb-4 text-gray-700">
-                            Yakin ingin menghapus <b>{{ $student->nama }}</b>?
+                            Yakin ingin menghapus <b>{{ $guard->name }}</b>?
                         </p>
 
                         <div class="flex justify-end gap-2">
-                            <button type="button" data-modal-hide="deleteStudentModal-{{ $student->id }}"
+                            <button type="button" data-modal-hide="deleteGuardiansModal-{{ $guard->id }}"
                                 class="px-4 py-2 bg-gray-200 rounded-lg">Batal</button>
 
                             <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg">Hapus</button>

@@ -72,7 +72,7 @@
       </x-admin.dash-sidelink>
 
       {{-- Guardian --}}
-      <x-admin.dash-sidelink href="/subject" :active="request()->is('subject')">
+      <x-admin.dash-sidelink href="/admin/guardians" :active="request()->is('admin/guardians')">
         <x-slot name="icon">
           <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 
               group-hover:text-gray-900 dark:group-hover:text-white" 

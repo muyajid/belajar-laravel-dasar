@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\AdminClassroom;
 use App\Http\Controllers\Admin\Dashboard;
 use App\Http\Controllers\Admin\AdminSubject;
 use App\Http\Controllers\Admin\AdminTeacher;
+use App\Http\Controllers\Admin\AdminGuardians;
 
 Route::get('/profile', [ProfilController::class, 'profile']);
 
@@ -32,10 +33,22 @@ Route::get('/admin', [Dashboard::class, 'index']);
 Route::prefix('admin')->group(function () {
     Route::get('/student', [AdminStudent::class, 'index'])->name('admin.student.index');
     Route::post('/student', [AdminStudent::class, 'store'])->name('admin.student.store');
+    Route::put('/student/{id}', [AdminStudent::class, 'update'])->name('admin.student.update');
+    Route::delete('/student/{id}', [AdminStudent::class, 'destroy'])->name('admin.student.destroy');
+
     Route::get('/classroom', [AdminClassroom::class, 'index'])->name('admin.classroom.index');
     Route::post('/classroom', [AdminClassroom::class, 'store'])->name('admin.classroom.store');
+
     Route::get('/subject', [AdminSubject::class, 'index'])->name('admin.subject.index');
     Route::post('/subject', [AdminSubject::class, 'store'])->name('admin.subject.store');
+
     Route::get('/teacher', [AdminTeacher::class, 'index'])->name('admin.teacher.index');
     Route::post('/teacher', [AdminTeacher::class, 'store'])->name('admin.teacher.store');
+    Route::put('/teacher/{id}', [AdminTeacher::class, 'update'])->name('admin.teacher.update');
+    Route::delete('/teacher/{id}', [AdminTeacher::class, 'destroy'])->name('admin.teacher.destroy');
+    
+    Route::get('/guardians', [AdminGuardians::class, 'index'])->name('admin.guardians.index');
+    Route::post('/guardians', [AdminGuardians::class, 'store'])->name('admin.guardians.store');
+    Route::put('/guardians/{id}', [AdminGuardians::class, 'update'])->name('admin.guardians.update');
+    Route::delete('/guardians/{id}', [AdminGuardians::class, 'destroy'])->name('admin.guardians.destroy');
 });

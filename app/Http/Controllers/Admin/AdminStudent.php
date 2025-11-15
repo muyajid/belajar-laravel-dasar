@@ -23,7 +23,7 @@ class AdminStudent extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validasi = $request->validate([
             'nama' => 'required|string|max:255',
             'email' => 'required|email|unique:students,email',
             'alamat' => 'required|string',
@@ -31,8 +31,33 @@ class AdminStudent extends Controller
             'class_rooms_id' => 'required|exists:class_rooms,id',
         ]);
 
-        Student::create($request->all());
+        Student::create([
+            'nama' => $validasi['nama'],
+            'email' => $validasi['email'],
+            'alamat' => $validasi['alamat'],
+            'tanggal_lahir' => $validasi['tanggal_lahir'],
+            'class_rooms_id' => $validasi['class_rooms_id']
+        ]);
+        return \redirect()->route('admin.student.index')->with('succes', 'Student berhasil ditambahkan!');
+    }
+    public function update(Request $request, string $id) {
+        $student = Student::findOrFail($id);
 
-        return redirect()->back()->with('success', 'Student berhasil ditambahkan!');
-}
+        $validasi = $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:students,email,' . $id,
+            'alamat' => 'required|string',
+            'tanggal_lahir' => 'nullable|date',
+            'class_rooms_id' => 'required|exists:class_rooms,id',
+        ]);
+
+        $student->update($validasi);
+        return \redirect()->route('admin.student.index')->with('succes', 'Student berhasil diupdate!');
+    }
+    public function destroy(string $id) {
+        $student = Student::findOrFail($id);
+        $student->delete();
+
+        return \redirect()->route('admin.student.index')->with('succes', 'Student berhasil dihapus!');
+    }
 }

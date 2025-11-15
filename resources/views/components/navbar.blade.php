@@ -15,7 +15,7 @@
               <x-nav-link href="/profile" :active="request()->is('profile')">Profile</x-nav-link>
               <x-nav-link href="/guardians" :active="request()->is('guardians')">Guardians</x-nav-link>
               <x-nav-link href="/datasiswa" :active="request()->is('datasiswa')">Data Siswa</x-nav-link>
-               <x-nav-link href="/classroom" :active="request()->is('guardians')">Class Room</x-nav-link>
+               <x-nav-link href="/classroom" :active="request()->is('classroom')">Class Room</x-nav-link>
               <x-nav-link href="/subject" :active="request()->is('subject')">Subject</x-nav-link>
               <x-nav-link href="/teacher" :active="request()->is('teacher')">Teacher</x-nav-link>
             </div>
