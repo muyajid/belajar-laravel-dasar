@@ -38,9 +38,11 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/classroom', [AdminClassroom::class, 'index'])->name('admin.classroom.index');
     Route::post('/classroom', [AdminClassroom::class, 'store'])->name('admin.classroom.store');
+    Route::put('/classroom/{id}', [AdminClassroom::class, 'update'])->name('admin.classroom.update');
 
     Route::get('/subject', [AdminSubject::class, 'index'])->name('admin.subject.index');
     Route::post('/subject', [AdminSubject::class, 'store'])->name('admin.subject.store');
+    Route::put('/subject/{id}', [AdminSubject::class, 'update'])->name('admin.subject.update');
 
     Route::get('/teacher', [AdminTeacher::class, 'index'])->name('admin.teacher.index');
     Route::post('/teacher', [AdminTeacher::class, 'store'])->name('admin.teacher.store');

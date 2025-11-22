@@ -15,10 +15,12 @@ class AdminTeacher extends Controller
     public function index()
     {
         $data = Teacher::with('subject')->get();
+        $subject = Subject::doesntHave('teacher')->get();
         
         return \view('admin.teacher', [
             'title' => "Data Teacher",
-            'teacher' => $data
+            'teacher' => $data,
+            'subject' => $subject
         ]);
     }
 
@@ -37,21 +39,15 @@ class AdminTeacher extends Controller
     {
         $validasi = $request->validate([
             'name' => 'required',
-            'subject_name' => 'required',
-            'subject_description' => 'required',
+            'subject_id' => 'required',
             'phone' => 'required',
             'email' => 'required|email',
             'address' => 'required'
         ]);
 
-        $subject = Subject::create([
-            'name' => $validasi['subject_name'],
-            'description' => $validasi['subject_description']
-        ]);
-
         Teacher::create([
             'name' => $validasi['name'],
-            'subject_id' => $subject->id,
+            'subject_id' => $validasi['subject_id'],
             'phone' => $validasi['phone'],
             'email' => $validasi['email'],
             'address' => $validasi['address']
@@ -86,16 +82,14 @@ class AdminTeacher extends Controller
 
         $validasi = $request->validate([
             'name' => 'required',
-            'subject_name' => 'required',
-            'subject_description' => 'required',
+            'subject_id' => 'required',
             'phone' => 'required',
             'email' => 'required|email',
-        'address' => 'required'
+            'address' => 'required'
         ]);
-
-        $subject->update(['name' => $validasi['subject_name'], 'description' => $validasi['subject_description']]);
         $teacher->update([
             'name' => $validasi['name'],
+            'subject_id' => $validasi['subject_id'],
             'phone' => $validasi['phone'],
             'email' => $validasi['email'],
             'address' => $validasi['address']

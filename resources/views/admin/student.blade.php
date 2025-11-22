@@ -119,7 +119,7 @@
                         class="bg-gray-50 border rounded-lg w-full p-2.5">
 
                     <select name="class_rooms_id" required class="bg-gray-50 border rounded-lg w-full p-2.5">
-                        <option value="">-- Pilih Kelas --</option>
+                        <option value=""></option>
                         @foreach ($classrooms as $classroom)
                             <option value="{{ $classroom->id }}">{{ $classroom->name }}</option>
                         @endforeach

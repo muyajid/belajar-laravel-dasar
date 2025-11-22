@@ -64,7 +64,17 @@ class AdminClassroom extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $classroom = ClassRoom::findOrFail($id);
+
+        $validasi = $request->validate([
+            'name_input' => 'required|string|max:255'
+        ]);
+        
+        $classroom->update([
+            'name' => $validasi['name_input']
+        ]);
+
+        return redirect()->route('admin.classroom.index');
     }
 
     /**

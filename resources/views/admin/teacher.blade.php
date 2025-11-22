@@ -7,7 +7,7 @@
             data-modal-target="addTeachModal" 
             data-modal-toggle="addTeachModal"
             class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-            + Tambah Teacher Dan Subject
+            + Tambah Teacher
         </button>
     </div>
 
@@ -19,7 +19,6 @@
                     <th scope="col" class="px-6 py-3">No</th>
                     <th scope="col" class="px-6 py-3">Nama</th>
                     <th scope="col" class="px-6 py-3">Subject</th>
-                    <th scope="col" class="px-6 py-3">Subject Description</th>
                     <th scope="col" class="px-6 py-3">Phone</th>
                     <th scope="col" class="px-6 py-3">Email</th>
                     <th scope="col" class="px-6 py-3">Addres</th>
@@ -32,7 +31,6 @@
                         <td class="px-6 py-4">{{ $i + 1 }}</td>
                         <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $teach->name }}</td>
                         <td class="px-6 py-4">{{ $teach->subject->name }}</td>
-                        <td class="px-6 py-4">{{ $teach->subject->description }}</td>
                         <td class="px-6 py-4">{{ $teach->phone }}</td>
                         <td class="px-6 py-4">{{ $teach->email }}</td>
                         <td class="px-6 py-4">{{ $teach->address }}</td>
@@ -108,17 +106,14 @@
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                     </div>
 
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject</label>
-                        <input type="text" name="subject_name" required
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                    </div>
-
-                    <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subject Description</label>
-                        <input type="text" name="subject_description" required
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
-                    </div>
+                    <select name="subject_id" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5
+                            dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <option value="">Pilih Subject</option>
+                            @foreach ($subject as $sub)
+                            <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                            @endforeach
+                    </select>
 
                     <div>
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone</label>
@@ -172,11 +167,14 @@
                         <input type="text" name="name" value="{{ $teach->name }}" required
                             class="bg-gray-50 border rounded-lg w-full p-2.5">
 
-                        <input type="text" name="subject_name" value="{{ $teach->subject->name }}" required
-                            class="bg-gray-50 border rounded-lg w-full p-2.5">
-
-                        <input type="text" name="subject_description" value="{{ $teach->subject->description }}" required
-                            class="bg-gray-50 border rounded-lg w-full p-2.5">
+                        <select name="subject_id" required
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5
+                            dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <option value="">Pilih Subject</option>
+                            @foreach ($subject as $sub)
+                            <option value="{{ $sub->id }}">{{ $sub->name }}</option>
+                            @endforeach
+                        </select>
 
                         <input type="text" name="phone" value="{{ $teach->phone }}" required
                             class="bg-gray-50 border rounded-lg w-full p-2.5">

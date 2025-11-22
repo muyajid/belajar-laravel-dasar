@@ -34,7 +34,14 @@ class AdminSubject extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validasi = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255'
+        ]);
+
+        Subject::create($validasi);
+
+        return \redirect()->route('admin.subject.index');
     }
 
     /**
@@ -50,7 +57,6 @@ class AdminSubject extends Controller
      */
     public function edit(string $id)
     {
-        //
     }
 
     /**
@@ -58,7 +64,19 @@ class AdminSubject extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+       $subject = Subject::findOrFail($id);
+
+        $validasi = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:2255'
+        ]);
+        
+        $subject->update([
+            'name' => $validasi['name'],
+            'description' => $validasi['description']
+        ]);
+
+        return redirect()->route('admin.subject.index');
     }
 
     /**
