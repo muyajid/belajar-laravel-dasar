@@ -11,15 +11,25 @@ class AdminGuardians extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $guardians = Guardians::all();
+   public function index(Request $request)
+{
+    $search = $request->search;
 
-        return \view('admin.guardians', [
-            'title' => 'Data Guardians',
-            'guardians' => $guardians
-        ]);
-    }
+    $guardians = Guardians::query()
+        ->when($search, function ($query) use ($search) {
+            $query->where('nama', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+        })
+        ->paginate(10) 
+        ->withQueryString();
+
+    return view('admin.guardians', [
+        'title' => 'Data Guardians',
+        'guardians' => $guardians
+    ]);
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -48,7 +58,7 @@ class AdminGuardians extends Controller
             'email' => $validasi['email']
         ]);
 
-        return \redirect()->route('admin.guardians.index')->with('succes', 'Guardians berhasil ditambahkan!');
+        return \redirect()->route('admin.guardians.index');
     }
 
     /**
@@ -82,7 +92,7 @@ class AdminGuardians extends Controller
         ]);
 
         $guardians->update($validasi);
-        return \redirect()->route('admin.guardians.index')->with('succes', 'Guardians berhasil diupdate!');
+        return \redirect()->route('admin.guardians.index');
     }
 
     /**
@@ -92,6 +102,6 @@ class AdminGuardians extends Controller
     {
         $guardians = Guardians::findOrFail($id);
         $guardians->delete();
-        return \redirect()->route('admin.guardians.index')->with('succes', 'Guardians berhasil dihapus!');
+        return \redirect()->route('admin.guardians.index');
     }
 }

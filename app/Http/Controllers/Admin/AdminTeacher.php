@@ -12,17 +12,30 @@ class AdminTeacher extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Teacher::with('subject')->get();
+        $search = $request->search;
+
+        $data = Teacher::with('subject')
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhereHas('subject', function ($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+            })
+        ->paginate(10)
+        ->withQueryString();
+
         $subject = Subject::doesntHave('teacher')->get();
-        
-        return \view('admin.teacher', [
-            'title' => "Data Teacher",
+
+        return view('admin.teacher', [
+            'title' => 'Data Teacher',
             'teacher' => $data,
             'subject' => $subject
         ]);
-    }
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -53,7 +66,7 @@ class AdminTeacher extends Controller
             'address' => $validasi['address']
         ]);
         
-        return \redirect()->route('admin.teacher.index')->with('succes', 'Teacher dan subject berhasil di tambahkan');
+        return \redirect()->route('admin.teacher.index');
     }
 
     /**
@@ -95,7 +108,7 @@ class AdminTeacher extends Controller
             'address' => $validasi['address']
         ]);
         
-        return \redirect()->route('admin.teacher.index')->with('succes', 'Teacher dan subject berhasil di update');
+        return \redirect()->route('admin.teacher.index');
     }
 
     /**
@@ -111,6 +124,6 @@ class AdminTeacher extends Controller
             $subject->delete();
         }
 
-        return \redirect()->route('admin.teacher.index')->with('succes', 'Teacher dan subject berhasil di hapus');
+        return \redirect()->route('admin.teacher.index');
     }
 }

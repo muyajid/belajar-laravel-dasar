@@ -11,10 +11,22 @@ class AdminSubject extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = Subject::with('teacher')->get();
+        // $data = Subject::with('teacher')->get();
 
+        // return \view('admin.subject', [
+        //     'title' => "Data Subject",
+        //     'subject' => $data
+        // ]);
+        
+        $search = $request->search;
+
+        $data = Subject::with('teacher')
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })->paginate(10)->withQueryString();
+        
         return \view('admin.subject', [
             'title' => "Data Subject",
             'subject' => $data

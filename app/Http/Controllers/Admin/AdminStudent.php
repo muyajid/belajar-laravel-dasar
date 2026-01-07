@@ -9,17 +9,29 @@ use App\Models\ClassRoom;
 
 class AdminStudent extends Controller
 {
-     public function index()
-    {
-        $students = Student::with('classroom')->get();
-        $classrooms = Classroom::all();
+     public function index(Request $request)
+{
+    $search = $request->search;
 
-        return view('admin.student', [
-            'title' => 'Data Students',
-            'students' => $students,
-            'classrooms' => $classrooms
-        ]);
-    }
+    $students = Student::with('classroom')
+        ->when($search, function ($query) use ($search) {
+            $query->where('nama', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhereHas('classroom', function ($q) use ($search) {
+                      $q->where('name', 'like', "%{$search}%");
+                  });
+        })
+        ->paginate(10)
+        ->withQueryString();
+
+    $classrooms = Classroom::all();
+
+    return view('admin.student', [
+        'title' => 'Data Students',
+        'students' => $students,
+        'classrooms' => $classrooms
+    ]);
+}
 
     public function store(Request $request)
     {
@@ -38,7 +50,7 @@ class AdminStudent extends Controller
             'tanggal_lahir' => $validasi['tanggal_lahir'],
             'class_rooms_id' => $validasi['class_rooms_id']
         ]);
-        return \redirect()->route('admin.student.index')->with('succes', 'Student berhasil ditambahkan!');
+        return \redirect()->route('admin.student.index');
     }
     public function update(Request $request, string $id) {
         $student = Student::findOrFail($id);
@@ -52,12 +64,12 @@ class AdminStudent extends Controller
         ]);
 
         $student->update($validasi);
-        return \redirect()->route('admin.student.index')->with('succes', 'Student berhasil diupdate!');
+        return \redirect()->route('admin.student.index');
     }
     public function destroy(string $id) {
         $student = Student::findOrFail($id);
         $student->delete();
 
-        return \redirect()->route('admin.student.index')->with('succes', 'Student berhasil dihapus!');
+        return \redirect()->route('admin.student.index');
     }
 }

@@ -13,6 +13,22 @@
 
     {{-- Tabel Data Teacher --}}
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <form method="GET" class="mb-4">
+            <div class="flex gap-2">
+                <input 
+                    type="text" 
+                    name="search" 
+                    value="{{ request('search') }}"
+                    placeholder="Cari nama, email, atau subject..."
+                    class="w-full px-4 py-2 border rounded-lg text-sm"
+                >
+                <button 
+                type="submit"
+                class="px-4 py-2 bg-blue-700 text-white rounded-lg text-sm">
+                Search
+                </button>
+            </div>
+        </form>
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
@@ -28,7 +44,9 @@
             <tbody>
                 @forelse ($teacher as $i => $teach)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="px-6 py-4">{{ $i + 1 }}</td>
+                        <td class="px-6 py-4">
+                            {{ $teacher->firstItem() + $i }}
+                        </td>
                         <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $teach->name }}</td>
                         <td class="px-6 py-4">{{ $teach->subject->name }}</td>
                         <td class="px-6 py-4">{{ $teach->phone }}</td>
@@ -83,6 +101,9 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-4">
+            {{ $teacher->links() }}
+        </div>
     </div>
 
     {{-- Modal Tambah Teacher --}}

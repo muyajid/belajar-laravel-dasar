@@ -11,9 +11,21 @@ class AdminClassroom extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = ClassRoom::all();
+        // $data = ClassRoom::all();
+        // return \view('admin.classroom', [
+        //     'title' => 'Data Classroom',
+        //     'classroom' => $data
+        // ]);
+
+        $search = $request->search;
+
+        $data = ClassRoom::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('name', 'like', "%{$search}%");
+            })->paginate(10)->withQueryString();
+        
         return \view('admin.classroom', [
             'title' => 'Data Classroom',
             'classroom' => $data
@@ -40,7 +52,7 @@ class AdminClassroom extends Controller
             'name' => $validasi['name_input']
         ]);
 
-        return redirect()->route('admin.classroom.index')->with('success', 'Kelas berhasil ditambahkan!');
+        return redirect()->route('admin.classroom.index');
     }
 
     /**
