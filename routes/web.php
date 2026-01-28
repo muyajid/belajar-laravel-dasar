@@ -13,6 +13,7 @@ use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\Admin\AdminStudent;
 use App\Http\Controllers\Admin\AdminClassroom;
 use App\Http\Controllers\Admin\Dashboard;
+use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\AdminSubject;
 use App\Http\Controllers\Admin\AdminTeacher;
 use App\Http\Controllers\Admin\AdminGuardians;
@@ -28,9 +29,13 @@ Route::get('/subject', [SubjectController::class, 'index']);
 Route::get('/teacher', [TeacherController::class, 'index']);
 
 // Admin route
-Route::get('/admin', [Dashboard::class, 'index']);
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/admin/login', [LoginController::class, 'login'])->name('admin.login.process');
+Route::post('/admin/logout', [LoginController::class, 'logout'])
+    ->name('admin.logout');
 // Hierarki endpoint admin
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/', [Dashboard::class, 'index'])->name('admin.dashboard');
     Route::get('/student', [AdminStudent::class, 'index'])->name('admin.student.index');
     Route::post('/student', [AdminStudent::class, 'store'])->name('admin.student.store');
     Route::put('/student/{id}', [AdminStudent::class, 'update'])->name('admin.student.update');

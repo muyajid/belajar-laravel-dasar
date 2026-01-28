@@ -339,9 +339,9 @@
             >
               <li>
                 <a
-                  href="#"
+                  href="/"
                   class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-                  >My profile</a
+                  >Home</a
                 >
               </li>
               <li>
@@ -434,11 +434,15 @@
               aria-labelledby="dropdown"
             >
               <li>
-                <a
-                  href="#"
-                  class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Sign out</a
-                >
+                <form action="{{ route('admin.logout') }}" method="POST">
+    @csrf
+    <button
+        type="submit"
+        class="block w-full text-left rounded-md px-3 py-2 text-base font-medium
+               text-gray-400 hover:bg-white/5 hover:text-white">
+        Sign out
+    </button>
+</form>
               </li>
             </ul>
           </div>

@@ -21,7 +21,7 @@ class AdminGuardians extends Controller
                   ->orWhere('email', 'like', "%{$search}%")
                   ->orWhere('phone', 'like', "%{$search}%");
         })
-        ->paginate(10) 
+        ->paginate(2) 
         ->withQueryString();
 
     return view('admin.guardians', [
